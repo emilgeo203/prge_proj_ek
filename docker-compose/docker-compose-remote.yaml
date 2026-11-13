@@ -44,16 +44,17 @@ services:
     build:
       context: ..
       dockerfile: docker/fastapi/Dockerfile
-    image: 'fastapi_prge'
-    container_name: 'fastapi_prge_${ENV_NAME}'
+    image: fastapi_prge
+    container_name: fastapi_prge_${ENV_NAME}
     environment:
       - *env-postgres-db
       - *env-postgres-user
       - *env-postgres-password
       - *env-postgres-port
     ports:
-      - '${FASTAPI_PORT}:10000'
+      - ${FASTAPI_PORT}:10000
 
 volumes:
   postgis-data:
   geoserver_data:
+
