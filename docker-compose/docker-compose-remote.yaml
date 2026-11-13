@@ -29,27 +29,32 @@ services:
     image: 'geoserver_prge'
     container_name: 'geoserver_prge_${ENV_NAME}'
     environment:
-      - *env-geoserver-admin-user
-      - *env-geoserver-admin-password
+      - SKIP_DEMO_DATA=true
+      - *env-postgres-db
+      - *env-postgres-user
+      - *env-postgres-password
+      - *env-geoserver-user
+      - *env-geoserver-password
     ports:
       - '${GEOSERVER_PORT}:8080'
     volumes:
-      - geoserver-data:/opt/geoserver_data
+      - geoserver_data:/opt/geoserver_data
 
-#  fastapi:
-#    build:
-#      context: ..
-#      dockerfile: docker/fastapi/Dockerfile
-#    image: 'fastapi_prge'
-#    container_name: 'fastapi_prge_${ENV_NAME}'
-#    environment:
-#      - *env-postgres-db
-#      - *env-postgres-user
-#      - *env-postgres-password
-#      - *env-postgres-port
-#    ports:
-#      - '${FASTAPI_PORT}:10000'
+  fastapi:
+    build:
+      context: ..
+      dockerfile: docker/fastapi/Dockerfile
+    image: fastapi_prge
+    container_name: fastapi_prge_${ENV_NAME}
+    environment:
+      - *env-postgres-db
+      - *env-postgres-user
+      - *env-postgres-password
+      - *env-postgres-port
+    ports:
+      - ${FASTAPI_PORT}:10000
 
 volumes:
   postgis-data:
-  geoserver-data:
+  geoserver_data:
+

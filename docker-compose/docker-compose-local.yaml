@@ -12,6 +12,7 @@ services:
       dockerfile: docker/postgis/Dockerfile
     image: 'postgis_prge'
     container_name: 'postgis_prge'
+    restart: unless-stopped
     environment:
       - *env-postgres-db
       - *env-postgres-user
@@ -27,13 +28,18 @@ services:
       dockerfile: docker/geoserver/Dockerfile
     image: 'geoserver_prge'
     container_name: 'geoserver_prge'
+    restart: unless-stopped
     environment:
+      - SKIP_DEMO_DATA=true
+      - *env-postgres-db
+      - *env-postgres-user
+      - *env-postgres-password
       - *env-geoserver-user
       - *env-geoserver-password
     ports:
       - 9004:8080
     volumes:
-      - geoserver-data:/opt/geoserver_data
+      - ../config/geoserver_data:/opt/geoserver_data
 
   fastapi:
     build:
@@ -41,6 +47,7 @@ services:
       dockerfile: docker/fastapi/Dockerfile
     image: 'fastapi_prge'
     container_name: 'fastapi_prge'
+    restart: unless-stopped
     environment:
       - *env-postgres-db
       - *env-postgres-user
@@ -52,4 +59,3 @@ services:
 
 volumes:
   postgis-data:
-  geoserver-data:
